@@ -35,8 +35,8 @@ def get_words_from_internet():
             words_entry = entry.text.split(maxsplit=2)
             try:
                 words_dict.append({"word": words_entry[0], "meaning": words_entry[2]})
-            except:
-                print(words_entry)
+            except IndexError as e:
+                print(f"Caught error: '{e}', while parsing the word {words_entry[0]}")
 
         word_json = json.dumps(words_dict, indent=2)
 
@@ -72,9 +72,10 @@ def find_jumbled_word(jumbled_word):
 
     for word in words:
         for k, v in word.items():
-            if k is not None and k == 'word' and len(v) == len(jumbled_word):
-                if ''.join(sorted(v.lower())) == ''.join(sorted(jumbled_word.lower())):
-                    possible_words.add(v)
+            if k is not None and k == 'word' \
+                    and len(v) == len(jumbled_word) \
+                    and ''.join(sorted(v.lower())) == ''.join(sorted(jumbled_word.lower())):
+                possible_words.add(v)
     return possible_words
 
 
